@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Fernando-cidade">
+    <meta name="description" content="">
+    <meta name="robts" content="follow">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <title>containers-Dev</title>
+</head>
+<nav>
+    <a href="home.html">Home</a>
+    <a href="software.html">Software Engineer</a>
+    <a href="containers.html">containers</a>
+    <a href="tutorias.html">tutorias</a>
+</nav> 
+<header>
+    <h1>Comandos básicos em <strong>Docker</strong></h1>
+</header>
+<body>
+    <main>
+        <article>
+    <p>
+        Para utilização do Docker é necessário conhecer alguns comandos e entender de forma clara e direta para que servem,
+        assim como alguns exemplos de uso.
+        Não abordaremos os comandos de criação de imagem e tratamento de problemas (troubleshooting) no Docker,
+        pois têm capítulos específicos para o detalhamento.
+    </p>
+    
+    <h2>Executando um container</h2>
+    <p> Para iniciar um container é necessário saber a partir de qual imagem será executado.
+        Para listar as imagens que seu <strong>Docker host</strong> tem localmente, execute o comando abaixo:</p>
+        <pre>
+            <code>docker image list</code>
+        </pre>
+    
+        <p>
+            As imagens retornadas estão presentes no seu <strong>Docker host</strong> e não demandam qualquer download da nuvem pública do Docker,
+            a menos que deseje atualizá-la. Para atualizar a imagem basta executar o comando abaixo:
+        </p>
+        <pre>
+            <code>docker image pull python</code>
+        </pre>
+    
+        <p>Usamos a imagem chamada<strong> python</strong> como exemplo, mas caso deseje atualizar qualquer outra imagem, basta colocar seu nome no lugar de <strong>python.</strong>
+          </p>
+    
+          <p>Caso deseje inspecionar a imagem que acabou de atualizar, basta usar o comando abaixo:</p>
+    
+          <p>O comando inspect é responsável por informar todos os dados referentes à imagem.</p>
+    
+          <p>Agora que temos a imagem atualizada e inspecionada, podemos iniciar o container.
+           Mas antes de simplesmente copiar e colar o comando, vamos entender como ele realmente funciona.</p>
+    
+           <pre>
+            <code>
+                docker container run <parâmetros> <imagem> <CMD> <argumentos>
+            </code>
+           </pre>
+    
+          <pre>
+            <code>docker image inspect python</code>
+          </pre>
+    
+    
+        <p>Os parâmetros mais utilizados na execução do container são:</p>
+    
+         <table>
+         <thead>
+            <tr>
+                <th>Parâmetro</th>
+                <th>Explicação</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+                <td>-d</td>
+                <td>Execução do container em background</td>
+            </tr>
+            <tr>
+                <td>-i</td>
+                <td>modo  interativo. mantén o STDIN aberto mesmo sem console anexado</td>
+    
+            </tr>
+            <tr>
+                <td>-t</td>
+                <td>Aloca uma pseudo TTY</td>
+            </tr>
+            <tr>
+                <td>--rm</td>
+                <td>"Automaticamente remove o container após finalização ("<strong>Não funciona com -d</strong>")"
+                </td>
+            </tr>
+            <tr>
+                <td>--name</td>
+                <td>Nomear o container</td>
+            </tr>
+            <tr>
+                <td>-v</td>
+                <td>Mapeamento de volume</td>
+            </tr>
+            <tr>
+                <td>-p</td>
+                <td>Mapeamento de  porta</td>
+            </tr>
+            <tr>
+                <td>-m</td>
+                <td>Mapeamento de porta</td>
+            </tr>
+            <tr>
+                <td>-m</td>
+                <td>Limitar o uso de memoria Ram</td>
+            </tr>
+            <tr>
+                <td>-c</td>
+                <td>Balancear o uso de CPU</td>
+            </tr>
+          </tbody>
+        </table>
+    
+        <P>Segue Um exemplo simples no seguinte comando:</P>
+        <pre>
+            <code>
+                docker container run -it --rm --name meu_python python bash
+            </code>
+        </pre>
+        <p>
+            "De acordo com o comando acima, será iniciado um container com o nome"
+            <strong>python</strong>" e o  processor executado nese container será o" <strong>bash</strong>
+        </p>
+    
+        <p>Vale lembrar que, caso o <strong>CMD</strong> não seja especificado no comando <strong>docker container run</strong>,
+            é utilizado o valor padrão definido no <strong>Dockerfile</strong> da imagem utilizada.
+            No nosso caso é <strong>python</strong> e seu comando padrão executa o binário <strong>python</strong>, ou seja,
+            se não fosse especificado o<strong> bash</strong>, no final do comando de exemplo acima, ]
+            ao invés de um shell bash do GNU/Linux, seria exibido um shell do <strong>python</strong>.</p>
+    
+        <h2>Mapeamento de volumes</h2>
+    
+        <p>Para realizar mapeamento de volume basta especificar qual origem do dado no host
+            e onde deve ser montado dentro do container.</p>
+        <pre>
+            <code>
+                docker container run -it --rm -v "<host>:<container>" python
+            </code>
+        </pre>
+       <P>O uso de armazenamento é melhor explicado em capítulos futuros, por isso não detalharemos o uso desse parâmetro.</P>
+    
+       <H2>Mapeamento de portas</H2>
+    
+       <P>Para realizar o mapeamento de portas basta saber qual porta será mapeada no host e
+        qual deve receber essa conexão dentro do container.</P>
+    
+        <pre>
+            <code>
+                docker container run -it --rm -p "<host>:<container>" python
+            </code>
+        </pre>
+        <p>Um exemplo com a porta 80 do host para uma porta 8080 dentro do container tem o seguinte comando:</p>
+        <pre>
+            <code>
+                docker container run -it --rm -p 80:8080 python
+            </code>
+        </pre>
+    
+        <p>Com o comando acima temos a porta <strong>80 </strong>acessível no <strong>Docker host </strong>que repassa todas as conexões para a porta 8080 dentro do container.
+            Ou seja, não é possível acessar a porta <strong>8080</strong> no endereço IP do <strong>Docker host</strong>,
+            pois essa porta está acessível apenas dentro do <strong>container</strong> que é isolada a nível de rede, como já dito anteriormente.</p>
+    
+    
+            <h2>Gerenciamento dos recursos</h2>
+            <p>Na inicialização dos containers é possível especificar alguns limites de utilização dos recursos.
+                Trataremos aqui apenas de memória RAM e CPU, os mais utilizados.</p>
+    
+            <p>Para limitar o uso de memória RAM que pode ser utilizada por esse container,
+                basta executar o comando abaixo:</p>
+                <pre>
+                    <code>
+                        docker container run -it --rm -m 512M python
+                    </code>
+                </pre>
+           <p>Com o comando acima estamos limitando esse container a utilizar somente 512 MB de RAM.</p>
+    
+           <p>Para balancear o uso da CPU pelos containers, utilizamos especificação de pesos para cada container,
+            quanto menor o peso, menor sua prioridade no uso. Os pesos podem oscilar de 1 a 1024.</p>
+    
+            <p>Caso não seja especificado o peso do container, ele usará o maior peso possível, nesse caso <strong>1024</strong>.</p>
+            <p>Usaremos como exemplo o peso<strong> 512</strong></p>
+    
+            <pre>
+                <code>
+                    docker container run -it --rm -c 512 python
+                </code>
+            </pre>
+            <p>Para entendimento, vamos imaginar que três containers foram colocados em execução.
+             Um deles tem o peso padrão 1024 e dois têm o peso 512.
+            Caso os três processos demandem toda CPU o tempo de uso deles será dividido da seguinte maneira: </p>
+    
+           <p>O processo com peso 1024 usará 50% do tempo de processamento
+            Os dois processos com peso 512 usarão 25% do tempo de processamento, cada.</p>
+    
+            <h2>Verificando a lista de containers</h2>
+            <p>Para visualizar a lista de containers de um determinado Docker host utilizamos o comando docker ps.</p>
+            <p>Esse comando é responsável por mostrar todos os containers, mesmo aqueles não mais em execução.</p>
+    
+            <pre>
+                <code>
+                    docker container list <parâmetros>
+                </code>
+            </pre>
+    
+            <p>Os parâmetros mais utilizados na execução do container são:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parâmetro</th>
+                        <th>Explicação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>-a</td>
+                        <td>Lista todos os containers, inclusiver os desligados</td>
+                    </tr>
+                    <tr>
+                        <td>-1</td>
+                        <td>Lista os Ultimos containers, inclusiver os desligados</td>
+                    </tr>
+                    <tr>
+                        <td>-n</td>
+                        <td>Lista os últimos N container, inclusive os desligados</td>
+                    </tr>
+                    <tr>
+                        <td>-q</td>
+                        <td>Lista apenas os ids dos containers, ótimo para  ultilização
+                            em scripts
+                        </td>
+                    </tr>
+                </tbody>
+               </table>
+               <h2>Gerenciamento de containers</h2>
+               <p> "Umma vez iniciado o container a partir de uma imagem é possivel gerenciar a ultilização com novos comandos.</p>
+               <p>Caso deseje desligar o container basta utilizar o comando
+                <a href="https://docs.docker.com/engine/reference/commandline/stop/" target="_blank">docker stop</a> Ele receber como argumento o <strong>ID</strong>
+            ou  <strong>nome</strong> do container. Ambos os dados podem ser obtidos com o <strong>docker ps</strong> explicado no topico anterior. </p>
+    
+            <p>Um Exemplo de uso:</p>
+            <pre>
+                <code>
+                    docker container start meu_python
+                </code>
+             </pre>
+             <p>Vale ressaltar que a ideia dos containers é a de serem descartáveis.
+                Caso você use o mesmo container por muito tempo sem descartá-lo, <br>
+                provavelmente está usando o Docker incorretamente. O Docker não é uma máquina,
+                é um processo em execução. E, como todo processo,
+                <br> deve ser descartado para que outro possa tomar seu lugar na reinicialização do mesmo.</p>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        </article>
+    </main>
+</body>
+
+<footer>
+    <p>Site criado por <a href="https://www.linkedin.com/in/fernando-s-cidade-28268b104/" target="_blank">Fernando-cidade</a> meu repositorio github <a href="https://www.github.com/Fernandocidade" target="_blank">GitHub</a>.</p>
+      </footer>
