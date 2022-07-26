@@ -1,0 +1,10 @@
+version: "1"
+
+services:
+ app:
+  buid: .
+  command: npm start
+  ports:
+    - "8080:8080" 
+    volumes:
+      - .:/usr/app
